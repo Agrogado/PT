@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroGado — Gestão Pecuária Inteligente &amp; Pastoreio Regenerativo</title>
+  <meta name="description" content="Aplicação Android offline-first para gestão de efetivos bovinos, ovinos e caprinos, leitura RFID, mapas de satélite e pastoreio racional segundo as Leis de Voisin." />
+  <style>
+    :root {
+      --primary: #1b4332;
+      --primary-mid: #2d6a4f;
+      --accent: #52b788;
+      --accent-soft: #d8f3dc;
+      --bg: #f6f8f6;
+      --surface: #ffffff;
+      --text: #1c2420;
+      --muted: #526058;
+      --border: #dfe7e1;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    a { color: var(--primary-mid); }
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    header.hero {
+      background: linear-gradient(135deg, #122d21 0%, var(--primary) 55%, var(--primary-mid) 100%);
+      color: #fff;
+      padding: 64px 0 56px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-bottom: 18px;
+    }
+    header.hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      line-height: 1.15;
+    }
+    header.hero p.lead {
+      max-width: 760px;
+      margin: 0 auto 28px;
+      font-size: 1.1rem;
+      color: #e2f2e7;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+    }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffd166;
+      color: #132a1f;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 15px 28px;
+      border-radius: 12px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.28);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 14px 22px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .trial-note {
+      margin-top: 16px;
+      font-size: 0.92rem;
+      color: #cbe7d5;
+    }
+    section {
+      padding: 56px 0;
+    }
+    section h2 {
+      font-size: 1.85rem;
+      color: var(--primary);
+      margin: 0 0 10px;
+    }
+    section p.section-sub {
+      color: var(--muted);
+      margin: 0 0 28px;
+      max-width: 780px;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+    }
+    .shot-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(27,67,50,0.06);
+    }
+    .shot-card img {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #e6ece8;
+      display: block;
+    }
+    .shot-card span {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 4px 14px rgba(27,67,50,0.05);
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+      color: var(--primary);
+    }
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .card li { margin-bottom: 6px; }
+    .science-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(27,67,50,0.06);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th {
+      background: var(--accent-soft);
+      color: var(--primary);
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .phase {
+      background: var(--surface);
+      border-left: 5px solid var(--accent);
+      border-radius: 12px;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .phase strong { display: block; color: var(--primary); margin-bottom: 4px; }
+    .install-box {
+      background: #eef6f0;
+      border: 1px solid #cde3d3;
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .install-box ol { margin: 10px 0 0; padding-left: 20px; }
+    .install-box li { margin-bottom: 8px; }
+    footer {
+      background: #142c21;
+      color: #cfe4d6;
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 0.92rem;
+    }
+    @media (max-width: 640px) {
+      th, td { padding: 10px 12px; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="badge">Android 8.0+ &bull; 100% Offline-First &bull; Pastoreio Racional Voisin</div>
+    <h1>🐄 AgroGado</h1>
+    <p class="lead">
+      Gestão Pecuária Profissional para explorações bovinas, ovinas e caprinas.
+      Rastreabilidade DGAV, leitura RFID em manga, mapas de satélite e rotação científica de pastagens — tudo no telemóvel, mesmo sem rede no campo.
+    </p>
+    <div class="cta-row">
+      <a class="btn-download" href="./AgroGado-v1.0-trial.apk" download>
+        📥 Descarregar APK (v1.0)
+      </a>
+      <a class="btn-secondary" href="#ciencia">
+        🔬 Ver Ciência de Voisin
+      </a>
+    </div>
+    <p class="trial-note">
+      Inclui <strong>15 dias gratuitos</strong> (até <strong>15 cabeças</strong>) &bull; Ativação posterior por código de licença sem perder os dados.
+    </p>
+  </div>
+</header>
+
+<section id="screenshots">
+  <div class="container">
+    <h2>📸 A Aplicação em Ação</h2>
+    <p class="section-sub">Capturas reais em funcionamento no terreno (exploração multi-espécie com +220 cabeças e piquetes georreferenciados).</p>
+    <div class="gallery">
+      <div class="shot-card">
+        <img src="screenshots/01_painel.png" alt="Painel Principal AgroGado" loading="lazy" />
+        <span>Painel &amp; Meteorologia 30d</span>
+      </div>
+      <div class="shot-card">
+        <img src="screenshots/02_efetivo.png" alt="Gestão de Efetivo" loading="lazy" />
+        <span>Efetivo &amp; Rastreabilidade</span>
+      </div>
+      <div class="shot-card">
+        <img src="screenshots/03_rfid.png" alt="Leitor RFID Bluetooth" loading="lazy" />
+        <span>Manga RFID &amp; GMD</span>
+      </div>
+      <div class="shot-card">
+        <img src="screenshots/04_piquetes_mapa.png" alt="Mapa de Satélite HD" loading="lazy" />
+        <span>Satélite HD &amp; Piquetes</span>
+      </div>
+      <div class="shot-card">
+        <img src="screenshots/05_voisin_rotacao.png" alt="Rotações Voisin e Pluviometria" loading="lazy" />
+        <span>Rotações Voisin &amp; Chuva</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ciencia" style="background: #eef4ef;">
+  <div class="container">
+    <h2>🔬 Fundamento Científico: Pastoreio Racional Voisin (PRV)</h2>
+    <p class="section-sub">
+      O motor de decisão da AgroGado implementa as <strong>4 Leis Universais de André Voisin</strong> calibradas para a fisiologia vegetal mediterrânica e ajustadas automaticamente pela pluviosidade real da herdade.
+    </p>
+
+    <div class="science-box">
+      <table>
+        <thead>
+          <tr>
+            <th>Lei / Fator</th>
+            <th>Cálculo na AgroGado</th>
+            <th>Benefício Agronómico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1.ª Lei — Repouso</strong></td>
+            <td>Primavera: <strong>32d</strong> &bull; Verão/Estio: <strong>60d</strong> &bull; Outono: <strong>40d</strong> &bull; Inverno: <strong>65d</strong></td>
+            <td>Garante a recuperação radicular completa antes do corte seguinte, aumentando matéria orgânica e infiltração de água.</td>
+          </tr>
+          <tr>
+            <td><strong>Ajuste Pluviométrico</strong></td>
+            <td>Soma automática dos últimos 30 dias (mm) da herdade: <strong>&ge; 25 mm &rarr; -15% repouso</strong>; <strong>seca &lt; 5 mm &rarr; +15% repouso</strong>.</td>
+            <td>Evita sobrepastoreio em períodos secos e aproveita picos de rebrota após as chuvas.</td>
+          </tr>
+          <tr>
+            <td><strong>2.ª Lei — Ocupação</strong></td>
+            <td>Permanência limitada a <strong>1–6 dias</strong> segundo a densidade instantânea (<code>UG/ha</code>), com alerta vermelho se exceder.</td>
+            <td>Impede o <strong>2.º corte do rebento novo</strong> (a partir do 4.º dia), protegendo o vigor da pastagem.</td>
+          </tr>
+          <tr>
+            <td><strong>3.ª Lei — Sinergia Multi-Espécie</strong></td>
+            <td>Bovinos/Equinos (<code>1.0 UG</code>), Suínos (<code>0.5 UG</code>), Ovinos e Caprinos (<code>0.15 UG</code>).</td>
+            <td><strong>Sinergia Tripla:</strong> bovinos despontam estrato alto; ovinos adubam e equilibram leguminosas; caprinos controlam mato e quebram parasitas.</td>
+          </tr>
+          <tr>
+            <td><strong>4.ª Lei — Fertilização Biológica</strong></td>
+            <td>Estimativa de <strong>~28 kg estrume+urina/UG/dia</strong> e <strong>~180 g Azoto (N)/UG/dia</strong>, mantendo resíduo mínimo de <strong>7 cm</strong>.</td>
+            <td>Regenera o solo biologicamente, reduz adubação sintética e protege a humidade superficial.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="phases">
+      <div class="phase" style="border-left-color: #d32f2f;">
+        <strong>🌱 Fase 1 (&lt; 35%)</strong>
+        Reserva Radicular — Proibido pastorear.
+      </div>
+      <div class="phase" style="border-left-color: #f57c00;">
+        <strong>🌿 Fase 2 (35% – 84%)</strong>
+        Chama de Crescimento — Acumulação rápida de biomassa.
+      </div>
+      <div class="phase" style="border-left-color: #2e7d32;">
+        <strong>🎯 Fase 3 (85% – 114%)</strong>
+        Ponto Ótimo de Voisin — Máxima energia e reserva radicular.
+      </div>
+      <div class="phase" style="border-left-color: #6d4c41;">
+        <strong>🌾 Fase 4 (&ge; 115%)</strong>
+        Pasto Maduro / Sementeira — Ideal para pisoteio e <em>mulching</em>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="modulos">
+  <div class="container">
+    <h2>📱 Módulos Completos da Aplicação</h2>
+    <p class="section-sub">Construída para trabalhar no monte sem internet, com sincronização meteorológica e backups locais.</p>
+    <div class="grid-3">
+      <div class="card">
+        <h3>🐄 Efetivo &amp; Conformidade DGAV</h3>
+        <ul>
+          <li>Importação direta de inventários e guias em PDF.</li>
+          <li>Leitura de brincos por câmara/OCR e foto individual.</li>
+          <li>Registo de nascimento ligado à mãe (herda espécie, raça e piquete).</li>
+          <li><strong>Bloqueio automático na venda/abate</strong> se existir carência sanitária ativa.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>📡 Manga RFID ISO 11784/85</h3>
+        <ul>
+          <li>Ligação Bluetooth a leitores/bastões FDX-B / HDX.</li>
+          <li>Consulta rápida, tratamentos em lote e auditoria de piquetes.</li>
+          <li><strong>GMD Automático:</strong> calcula o Ganho Médio Diário (<code>kg/dia</code>) na pesagem em manga.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🗺️ Satélite HD, Piquetes &amp; Cobrição</h3>
+        <ul>
+          <li>Desenho de perímetros no mapa com área automática em hectares.</li>
+          <li>Estado automático do piquete e histórico de pastoreio.</li>
+          <li>Controlo de <strong>Touros / Cobrição</strong> com janela prevista de partos (+283 dias).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🌦️ Chuva Real &amp; Previsão 5 Dias</h3>
+        <ul>
+          <li>Acumulado real dos últimos 30 dias pela localização da herdade.</li>
+          <li>Previsão de precipitação a 5 dias no Painel, Análise e Rotações.</li>
+          <li>Registo manual complementar de pluviómetro de campo.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>📊 Simulador (+500 ha) &amp; Custos</h3>
+        <ul>
+          <li>Simulador de carga forrageira para grandes herdades (&gt; 500 ha).</li>
+          <li>Registo de custos (feno, ração, sanidade) com <strong>Custo / Cabeça (€/cab)</strong>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🔔 Alertas às 08:00 &amp; Backups</h3>
+        <ul>
+          <li>Resumo diário matinal de piquetes vencidos, carências, partos e infraestruturas.</li>
+          <li>Backup automático semanal JSON + exportação/importação manual.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="instalar">
+  <div class="container">
+    <h2>📲 Como Instalar e Ativar</h2>
+    <div class="install-box">
+      <ol>
+        <li>Descarregue o ficheiro <a href="./AgroGado-v1.0-trial.apk" download><strong>AgroGado-v1.0-trial.apk</strong></a> no seu telemóvel Android (8.0 ou superior).</li>
+        <li>Abra o ficheiro e autorize <em>"Instalar aplicações de fontes desconhecidas"</em> se o Android solicitar.</li>
+        <li>Comece imediatamente com <strong>15 dias gratuitos</strong> (até <strong>15 cabeças</strong>).</li>
+        <li>Para desbloquear a licença anual ou vitalícia, abra <strong>Mais &rarr; Produtor &rarr; Licença &amp; Trial</strong>, copie o seu <strong>ID do Dispositivo</strong> (<code>AGRO-XXXX-YYYY</code>) e insira o código de ativação.</li>
+      </ol>
+      <p style="margin: 14px 0 0; font-size: 0.92rem; color: var(--muted);">
+        <strong>Nota Xiaomi (MIUI / HyperOS):</strong> para o alerta diário das 08:00 disparar pontualmente, defina <em>Poupança de bateria &rarr; Sem restrições</em> nas definições da app AgroGado.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    AgroGado &copy; 2026 &mdash; Gestão Pecuária Inteligente &amp; Pastoreio Regenerativo 🌿🐄🐑🐐
+  </div>
+</footer>
+
+</body>
+</html>
